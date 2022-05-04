@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
-import { Image, ImageBackground, Text, TextInput, View, scroll, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, ImageBackground, Text, TextInput, View, scroll, Dimensions, ActivityIndicator } from "react-native";
 import SpeedDial from "../Components/SpeedDial";
 import ImageBg from "../Layouts/ImageBackground";
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Button } from "react-native-elements";
 import { pickImage } from "../Hooks/PickImage";
 import { colors, consts } from "../Constants";
-import { KeyboardAvoidingView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { imageVQAatom, userAuth } from "../utils/Atoms";
+import { useAtom } from "jotai";
+import { useMutation } from "react-query";
+import { AskQuestionVQA } from "../utils/Request";
+
 const shadow = {
     shadowOffset: {
         width: 0,
@@ -21,7 +25,10 @@ const shadow = {
 const { width, height } = Dimensions.get('screen')
 
 const VQA = () => {
-    const [image, setImage] = React.useState(consts.bg_image)
+    const [image, setImage] = useAtom(imageVQAatom)
+    const [user, setUser] = useAtom(userAuth)
+    const [question, setQuestion] = useState("")
+    const [answer, setAnswer] = useState("")
 
     function handlePickImage(params) {
         pickImage(setImage)
@@ -29,6 +36,37 @@ const VQA = () => {
     useEffect(() => {
         console.log("İMAGE", image);
     }, [image])
+
+    let username = user[0]
+
+    const { data, mutate, isLoading, isError } = useMutation("ASK_QUESTION", () => {
+        let img = image.split("=")[image.split("?").length - 1]
+        let prm = "username=" + username
+            + "&question=" + question
+            + "&photoName=" + img
+        console.log(prm);
+        return AskQuestionVQA(prm).then(res => {
+            console.log("RESPONSEEE ---", res);
+            setAnswer(res)
+            return res
+        })
+    },
+        {
+            onSettled: () => setQuestion("")
+        }
+    )
+
+
+
+
+
+
+    function handleSubmit(params) {
+        console.log("Submit Question")
+        mutate()
+    }
+    // mutate()
+
     return (
         <>
 
@@ -38,6 +76,8 @@ const VQA = () => {
 
                     style={{}}>
                     <Image
+                        on
+                        onProgress={() => <ActivityIndicator />}
                         style={{ height: height / 3, }}
                         source={{ uri: image }}
                     />
@@ -63,6 +103,8 @@ const VQA = () => {
                         </View>
 
                         <TextInput placeholder="(type your question.)" placeholderTextColor={'#6D6980'}
+                            onChangeText={text => setQuestion(text)}
+                            value={question}
                             style={{
                                 ...shadow,
                                 backgroundColor: 'red', minHeight: 100, textAlign: 'center',
@@ -74,12 +116,15 @@ const VQA = () => {
                         // inline
                         />
 
-                        <Button title={'Submit'} onPress={() => console.log("button")}
+                        <Button title={'Submit'} onPress={() => handleSubmit()}
+                            disabled={(image === consts.bg_image) || (question === "")}
+                            loading={isLoading}
+
                             containerStyle={{
-                                borderRadius: 100, width: 100,
+                                borderRadius: 100, width: 100, ...shadow
                             }}
-                            buttonStyle={{ backgroundColor: '#3E3958', ...shadow }}
-                            disabledStyle={{ backgroundColor: '#3E3958', ...shadow }}
+                            buttonStyle={{ backgroundColor: colors.text_color_light, }}
+                            disabledStyle={{ backgroundColor: '#3E3958', }}
 
                         />
 
@@ -95,7 +140,10 @@ const VQA = () => {
                                 color: '#6D6980',
 
                             }}>
-                                (your answer will be here.)
+                                {
+                                    answer ?
+                                        answer : "(your answer will be here.)"
+                                }
                             </Text>
                         </View>
 

@@ -5,7 +5,7 @@ import React from "react";
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from "./TabsNav";
 import SettingsScreen from "../Screens/Settings/SettingsScreen";
-import ViltCamera from "../Screens/Vilt camera";
+import CameraOpen from "../Screens/Camera";
 
 
 const Stack = createStackNavigator();
@@ -38,7 +38,7 @@ const MainNav = () => {
             />
 
             <Stack.Screen
-                name="camera" key={"camera"} component={ViltCamera} />
+                name="camera" key={"camera"} component={CameraOpen} />
 
 
 

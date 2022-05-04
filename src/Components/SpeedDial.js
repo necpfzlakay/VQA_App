@@ -1,8 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { SpeedDial } from 'react-native-elements';
-
 export default ({ chose_photo }) => {
+    const navigation = useNavigation()
     const [open, setOpen] = useState(false);
+    function goCamera(params) {
+        navigation.navigate("camera")
+        setOpen(false)
+    }
+    function photoChose(params) {
+        chose_photo()
+        setOpen(false)
+    }
     return (
         <SpeedDial
             isOpen={open}
@@ -14,12 +23,12 @@ export default ({ chose_photo }) => {
             <SpeedDial.Action
                 icon={{ name: 'photo', color: '#fff' }}
                 title="Add"
-                onPress={chose_photo && chose_photo}
+                onPress={chose_photo && photoChose}
             />
             <SpeedDial.Action
                 icon={{ name: 'camera', color: '#fff' }}
                 title="Camera"
-                onPress={() => console.log('Delete Something')}
+                onPress={goCamera}
             />
         </SpeedDial>
     );

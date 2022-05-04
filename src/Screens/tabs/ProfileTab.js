@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, Text, View, Dimensions, Image, ScrollView, ActivityIndicator } from "react-native";
+import React, { useEffect } from 'react'
+import { StyleSheet, Text, View, Dimensions, Image, ScrollView, ActivityIndicator, RefreshControl, FlatList } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { colors, consts, shadow } from '../../Constants';
 import ImageBg from '../../Layouts/ImageBackground';
@@ -18,11 +18,50 @@ function ProfileTab({ navigation }) {
     const styles = getStyles()
     // console.log(user);
 
-    const { data, isError, isLoading, isSuccess } = useQuery("HistoryFetch", () => {
+    const { data, isError, isLoading, isSuccess, refetch } = useQuery("HistoryFetch", () => {
         return axios.get(consts.API_URL + "history?username=" + user[0])
     })
-    // console.log("------", data[0]);
-    console.log(isError);
+    // console.log("------", data.data[0]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            let screens = navigation.getState().routes.slice(-1)[0]
+            console.log("focused...", screens.name);
+            refetch()
+        });
+    }, [navigation])
+
+
+    function renderItem(item, index) {
+        // console.log("itemmm index", item.item);
+        item = item.item
+        return (
+            <>
+                <View key={item[3]} style={styles.cardContainer} >
+                    <View style={styles.textContainer} >
+                        <Text style={styles.questionContainer}>
+                            Question:  {item[1]}
+                        </Text>
+                        <Text style={styles.answerContainer}>
+                            Answer:     {item[2]}
+                        </Text>
+                    </View>
+                    <View style={{ flex: 1.5, justifyContent: 'center' }} >
+                        <Image
+                            loadingIndicatorSource={() => <ActivityIndicator size={'large'} />}
+                            style={{ width: '100%', height: '90%', borderRadius: 15, }}
+                            onLoad={() => <ActivityIndicator />}
+                            source={{ uri: consts.API_URL + "/image?image=" + item?.[3] }}
+                        // source={{ uri: consts.API_URL + "/image?image=" + "4288C1E7C785-EB59-4C57-AAE7-9AF63B546765.jpg" }}
+                        />
+                    </View>
+                </View>
+            </>
+        )
+
+    }
+
+
     return (
         <ImageBg>
             {/* <View style={styles.header} >
@@ -56,7 +95,7 @@ function ProfileTab({ navigation }) {
                         <Text style={{ fontSize: 8 }}> (What did you asked?)</Text>
                     </Text>
 
-                    {data?.length === 0 ?
+                    {data?.data?.length === 0 ?
                         <View style={{
                             justifyContent: 'center', height: 200,
                         }}>
@@ -66,32 +105,17 @@ function ProfileTab({ navigation }) {
                             }}>There is No History Yet</Text>
                         </View>
                         :
-                        <ScrollView>
+                        <FlatList
+                            data={data?.data.reverse()}
+                            // inverted
+                            // refreshing={true}
+                            // onRefresh={refetch}
+                            // refreshControl={() => <RefreshControl />}
+                            keyExtractor={(item, index) => index}
+                            renderItem={(item, index) => renderItem(item, index)}
+                        />
 
-                            {data?.data.map((item, index) => {
-                                console.log("---->", data?.data[index][3]);
-                                return (
-                                    <View key={index} style={styles.cardContainer} >
-                                        <View style={styles.textContainer} >
-                                            <Text style={styles.questionContainer}>
-                                                Question:  {item[1]}
-                                            </Text>
-                                            <Text style={styles.answerContainer}>
-                                                Answer:     {item[2]}
-                                            </Text>
-                                        </View>
-                                        <View style={{ flex: 1.5, justifyContent: 'center' }} >
-                                            <Image
-                                                style={{ width: '100%', height: '90%', borderRadius: 15, }}
-                                                onLoad={() => <ActivityIndicator />}
-                                                source={{ uri: consts.API_URL + "/image?image=" + data?.data[index][3] }}
-                                            // source={{ uri: consts.API_URL + "/image?image=" + "4288C1E7C785-EB59-4C57-AAE7-9AF63B546765.jpg" }}
-                                            />
-                                        </View>
-                                    </View>
-                                )
-                            })}
-                        </ScrollView>
+
                     }
 
 
@@ -99,7 +123,7 @@ function ProfileTab({ navigation }) {
 
                 </View>
             </KeyboardAwareScrollView>
-        </ImageBg>
+        </ImageBg >
     );
 }
 
@@ -110,7 +134,7 @@ const getStyles = () => StyleSheet.create({
         backgroundColor: 'red', height: 10
     },
     imageContainer: {
-        flex: 1, height: height / 3, borderRadius: 50,
+        flex: 1, height: height / 3, borderRadius: 30,
         justifyContent: 'center', alignItems: 'center',
         borderWidth: .2, margin: 5, marginBottom: -5, backgroundColor: colors.blueBg,
         ...shadow

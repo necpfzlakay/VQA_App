@@ -21,4 +21,4 @@ const ImageBg = ({ children }) => {
     )
 }
 
-export default ImageBg
+export default ImageBg;

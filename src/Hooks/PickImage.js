@@ -23,7 +23,7 @@ const pickImage = async (set) => {
         }
         formdt.append("photo", photo_data)
         // console.log(formData);
-
+        console.warn("FORMDATAAA  111 ---", formdt);
         if (!res.cancelled) {
             // setImage(res.uri);
         }
@@ -31,7 +31,7 @@ const pickImage = async (set) => {
     })
         .then(async formData => {
             // console.log(formData);
-
+            console.warn("FORMDATAAA  222 ---", formData);
             return await fetch(consts.API_URL + "file", {
                 method: 'POST',
                 headers: {

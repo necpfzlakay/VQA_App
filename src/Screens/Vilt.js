@@ -15,28 +15,28 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useAtom } from 'jotai';
 import { atom } from 'jotai';
 import { useNavigation } from '@react-navigation/native';
-import { imageAtom } from '../utils/Atoms';
+import { imageAtom, base64sendAtom } from '../utils/Atoms';
 
 const { width, height } = Dimensions.get('screen')
-let base64send = ""
+// let base64send = ""
 
 
 
 
-function Buttons({ setimg, setAnswer }) {
+function Buttons({ setimg, setAnswer, base64send, setbase64Send }) {
     const navigation = useNavigation()
     return (
         <View style={{
             flex: 1, justifyContent: 'space-evenly',
             marginHorizontal: 40,
         }}>
-            <Button onPress={() => chooseImage({ setImage: setimg, setanswer: setAnswer })} text={"Gallery"} />
-            <Button onPress={() => navigation.navigate("camera")} text={"Camera"} />
+            <Button onPress={() => chooseImage({ setImage: setimg, setanswer: setAnswer, setbase64Send })} text={"Gallery"} />
+            <Button onPress={() => navigation.navigate("camera", { isBase64: true, setimg, base64send, setbase64Send })} text={"Camera"} />
         </View>
     )
 }
 
-function MainScreen({ image, setimg, answer, setAnswer, }) {
+function MainScreen({ image, setimg, answer, setAnswer, base64send }) {
     const [question, setQuestion] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -87,7 +87,7 @@ function MainScreen({ image, setimg, answer, setAnswer, }) {
                         }}>
                             <Text
                                 onPress={() => !loading &&
-                                    submit(question, setAnswer, setLoading, setError)}
+                                    submit(question, setAnswer, setLoading, setError, base64send)}
                                 style={{
                                     // backgroundColor: colors.bg_color_dark,
                                     paddingHorizontal: 10, borderRadius: 10,
@@ -137,7 +137,7 @@ function MainScreen({ image, setimg, answer, setAnswer, }) {
 }
 
 
-async function chooseImage({ setImage, setanswer }) {
+async function chooseImage({ setImage, setanswer, setbase64Send }) {
     console.log("image");
     let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -148,13 +148,13 @@ async function chooseImage({ setImage, setanswer }) {
 
     }).then(async res => {
         setImage(res.uri)
-        base64send = res?.base64
+        setbase64Send(res?.base64)
         // console.log(res);
         // console.log(base64send);
     })
 }
 let disable = false
-function submit(question, setanswer, setLoading, setError) {
+function submit(question, setanswer, setLoading, setError, base64send) {
     if (!disable) {
         disable = true
         setLoading(true)
@@ -183,7 +183,7 @@ function submit(question, setanswer, setLoading, setError) {
 }
 
 export default function Vilt() {
-
+    const [base64send, setbase64Send] = useAtom(base64sendAtom)
     const [image, setImage] = useAtom(imageAtom)
     const [answer, setAnswer] = useState("")
     const [question, setQuestion] = useState("")
@@ -202,9 +202,12 @@ export default function Vilt() {
                                 image={image} setimg={setImage}
                                 answer={answer} setAnswer={setAnswer}
                                 question={question} setQuestion={setQuestion}
+                                base64send={base64send}
                             />
                             :
-                            <Buttons setimg={setImage} setAnswer={setAnswer} />
+                            <Buttons setimg={setImage} setAnswer={setAnswer}
+                                base64send={base64send}
+                                setbase64Send={setbase64Send} />
                     }
 
 
