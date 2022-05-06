@@ -20,7 +20,6 @@ const shadow = {
     shadowOpacity: .2,
     elevation: 5,
 }
-// let api_url = 'http://127.0.0.1:5000/image?%C4%B0MAGE=42887D4730FF-BDF9-4E62-A026-556EDDB8099B.jpg'
 
 const { width, height } = Dimensions.get('screen')
 

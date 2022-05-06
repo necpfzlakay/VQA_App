@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19000,
-  "expoServerNgrokUrl": "https://ax-kw4.anonymous.vqa-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.ax-kw4.anonymous.vqa-app.exp.direct",
-  "ngrokPid": 22168,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "packagerPid": null,
   "webpackServerPort": null
 }
