@@ -31,12 +31,7 @@ const Tabs = ({ navigation }) => {
         console.log("render");
     }, [navigation])
     return (
-        <Tab.Navigator
-            screenOptions={{
-                headerShown: true,
-            }}
-
-        >
+        <Tab.Navigator screenOptions={{ headerShown: true, }}>
             <Tab.Screen name={`VQA`} key={"VQA"} component={VQA}
                 options={{
                     ...tabOptions,

@@ -10,7 +10,7 @@ const pickImage = async (set) => {
         aspect: [1, 1],
         quality: 1,
     }).then(res => {
-        // console.log("resss", res);
+        // console.log("Image From Device", res);
         let formdt = new FormData();
 
         // // Assume "photo" is the name of the form field the server expects 
@@ -22,7 +22,7 @@ const pickImage = async (set) => {
             type: res.type
         }
         formdt.append("photo", photo_data)
-        // console.log(formData);
+        // console.log("formData", formdt);
         console.warn("FORMDATAAA  111 ---", formdt);
         if (!res.cancelled) {
             // setImage(res.uri);
@@ -30,7 +30,7 @@ const pickImage = async (set) => {
         return formdt
     })
         .then(async formData => {
-            // console.log(formData);
+            console.log("formdt", formData);
             console.warn("FORMDATAAA  222 ---", formData);
             return await fetch(consts.API_URL + "file", {
                 method: 'POST',
@@ -59,7 +59,7 @@ const pickImage = async (set) => {
                 })
 
         })
-    // console.log("result ", result);
+    console.log("result ", result);
 
     return result
 };

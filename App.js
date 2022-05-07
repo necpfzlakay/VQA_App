@@ -11,15 +11,6 @@ StatusBar.setBarStyle('light-content', true);
 const queryClient = new QueryClient()
 export default function App() {
   LogBox.ignoreAllLogs();
-  // setTimeout(() => {
-  //   return
-  //   (
-  //     <View style={{ width: 100, height: 200 }}>
-
-  //       <Svg />
-  //     </View>
-  //   )
-  // }, 2000);
   return (
     <Provider >
       <QueryClientProvider client={queryClient}>

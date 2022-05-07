@@ -48,7 +48,7 @@ const CameraOpen = ({ navigation, route }) => {
             type: "image/" + photoUriName,
             name: photo.uri.split("/")[photo.uri.split("/").length - 1]
         })
-        console.warn("SON FORM DATA---- ", formDt);
+        console.warn("FORM DATA---- ", formDt);
         UploadImage({ imageOBJ: formDt }).then(res => {
             let newPhotoUri = consts.API_URL + "/image?image=" + photoUriName
             setImageVQA(newPhotoUri)

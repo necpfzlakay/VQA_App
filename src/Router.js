@@ -12,22 +12,10 @@ const Router = () => {
     const [user, setUser] = useAtom(userAuth)
     console.log("UUSERRRR--ROUTER---", user);
     return (
-
         <NavigationContainer >
-            {
-                user ?
-
-                    <MainNav />
-                    :
-                    <AuthNav />
-
-            }
-
+            {user ? <MainNav /> : <AuthNav />}
         </NavigationContainer>
-
-
     )
-
 }
 
 
