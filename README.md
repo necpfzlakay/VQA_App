@@ -9,9 +9,9 @@ Follow the steps given below expo link (for the shortest way)
 https://docs.expo.dev/get-started/installation/
 ```
 
-* firstly, install node js from [here](https://nodejs.org/en/)
-* install git from [here](https://git-scm.com/downloads)
-* install yarn from terminal with given code
+* Firstly, install node js from [here](https://nodejs.org/en/)
+* Install git from [here](https://git-scm.com/downloads)
+* Install yarn from terminal with given code
 ```
 npm install --global yarn
 ```
@@ -20,7 +20,7 @@ npm install --global yarn
 npm install --global expo-cli
 ```
 * Then application should be avaliable to run. 
-* just go to the com.VQA_Backend folder within terminal and run this code below:
+* Just go to the com.VQA_Backend folder within terminal and run this code below:
 ```
 expo start
 ```
