@@ -1,8 +1,8 @@
 # VQA_App
- Visual Question Answering As Microservices Mobile Application
+ Visual Question Answering as Microservices Mobile Application
 
  
-## How To Run Expo Applicaton
+## How to Run Expo Applicaton
 
 Follow the steps given below expo link (for the shortest way)
 ```
