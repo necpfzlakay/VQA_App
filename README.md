@@ -27,5 +27,5 @@ expo start
 - When expo started to run succesfuly, press d key in keyboard to open developer menu (it will be open in the browser)
 - On the left side, there are some utilites. Press Tunnel button. After that, application will be online within your local wifi.
 - Install Expo Go Application from your mobile device' s market, and just scan the QR code of the developer menu.
-- Note 1: Tunnel button does not work on the Kadir Has University' s wifi network because of VPN protection
+- Note 1: Tunnel button does not work on the FortiClient' s VPN protection
 - Note 2: Expo may require mobile application dependency such as Android SDK and Environment Variables You should install Android SDK and Build Tools etc. from [here](https://developer.android.com/studio)
